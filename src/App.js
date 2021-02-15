@@ -1,5 +1,5 @@
 import "./assets/css/styles.css";
-import Header from "./navbar/navbar";
+import Header from "./components/navbar";
 
 export default function App() {
   return (
