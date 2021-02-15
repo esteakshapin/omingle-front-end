@@ -6,7 +6,6 @@ import {
   List,
   ListItem,
   ListItemText,
-  Container,
   Button
 } from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
