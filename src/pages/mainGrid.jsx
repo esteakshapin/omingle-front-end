@@ -3,10 +3,32 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 
+import QuizGrid from "./quizGrid";
+
 const useStyles = makeStyles({
-  mainGrid: {
+  root: {
     flexGrow: 1,
-    backgroundColor: "red"
+    // backgroundColor: "red",
+    height: 100
+  },
+  paper: {
+    height: "100%",
+    position: "relative"
+  },
+  mainGrid: {
+    margin: 0,
+    width: "100%",
+    height: "100%",
+    justifyContent: "space-around"
+    // backgroundColor: "green"
+  },
+  messageGrid: {
+    // height: "81.5vh"
+    // backgroundColor: "pink"
+  },
+  quizGrid: {
+    // backgroundColor: "blue",
+    // height: "81.5vh"
   }
 });
 
@@ -14,15 +36,35 @@ export default function MainGrid() {
   const classes = useStyles();
 
   return (
-    <Grid contianer className={classes.mainGrid} spacing={2}>
-      <Grid item xs={2}>
-        <Paper variant="outlined" className={classes.paper}>
-          <p> hello </p>
-        </Paper>
+    <div className={classes.root}>
+      <Grid
+        container
+        justify="space-around"
+        spacing={3}
+        className={classes.mainGrid}
+      >
+        <Grid item xs={12} sm={12} md={8} lg={9} className={classes.quizGrid}>
+          <Paper variant="outlined" square className={classes.paper}>
+            <QuizGrid />
+          </Paper>
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sm={12}
+          md={4}
+          lg={3}
+          className={classes.messageGrid}
+        >
+          <Paper
+            style={{ borderRadius: "22px", backgroundColor: "#EDF0F4" }}
+            variant="outlined"
+            className={classes.paper}
+          >
+            Messaging section
+          </Paper>
+        </Grid>
       </Grid>
-      <Paper variant="outlined" className={classes.paper}>
-        <p> hello </p>
-      </Paper>
-    </Grid>
+    </div>
   );
 }
