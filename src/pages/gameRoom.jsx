@@ -2,16 +2,28 @@ import React from "react";
 import Header from "/src/components/navbar";
 import Footer from "/src/components/footer";
 import { makeStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
+
+import CssBaseline from "@material-ui/core/CssBaseline";
+
+import MainGrid from "./mainGrid";
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    display: "flex",
+    flexDirection: "column",
+    minHeight: "100vh"
+  },
+  main: {
+    marginTop: theme.spacing(8),
+    marginBottom: theme.spacing(2),
+    backgroundColor: "red"
+  },
+  mainGrid: {
     flexGrow: 1,
     backgroundColor: "red",
-    marginTop: "10px",
-    marginBottom: "10px",
-    paddingBottom: "10px"
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2)
+    // width:
   },
   paper: {
     height: 140,
@@ -23,21 +35,17 @@ const GameRoom = () => {
   const classes = useStyles();
 
   return (
-    <div>
+    <div className={classes.root}>
+      <CssBaseline />
       <Header />
-      <Grid container className={classes.root} spacing={2}>
-        <Grid item xs={12}>
-          <Grid container justify="center" spacing={2}>
-            {[0, 1, 2].map((value) => (
-              <Grid key={value} item>
-                <Paper className={classes.paper} />
-              </Grid>
-            ))}
-          </Grid>
-        </Grid>
-      </Grid>
+      <MainGrid />
       <Footer />
     </div>
+    // <div className={classes.rootDiv}>
+    //   <Header />
+    //   <h1> asdasd</h1>
+    //   <Footer />
+    // </div>
   );
 };
 

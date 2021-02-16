@@ -17,11 +17,6 @@ function Copyright() {
 }
 
 const useStyles = makeStyles((theme) => ({
-  fContianer: {
-    backgroundColor: "#FFFFFF",
-    display: "flex",
-    justifyContent: "center"
-  },
   textStyle: {
     fontFamily: "Roboto",
     fontSize: "14",
@@ -36,7 +31,8 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "auto",
     marginRight: "auto",
     marginLeft: "auto",
-    backgroundColor: "white"
+    backgroundColor: "white",
+    minWidth: "100vw"
   }
 }));
 
