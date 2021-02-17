@@ -4,6 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 
 import QuizGrid from "./quizGrid";
+import Message from "./message";
 
 const useStyles = makeStyles({
   root: {
@@ -19,16 +20,17 @@ const useStyles = makeStyles({
     margin: 0,
     width: "100%",
     height: "100%",
-    justifyContent: "space-around"
-    // backgroundColor: "green"
+    justifyContent: "space-around",
+    // backgroundColor: "green",
+    overflowY: "scroll"
   },
   messageGrid: {
-    // height: "81.5vh"
+    height: "100%"
     // backgroundColor: "pink"
   },
   quizGrid: {
     // backgroundColor: "blue",
-    // height: "81.5vh"
+    height: "100%"
   }
 });
 
@@ -56,13 +58,7 @@ export default function MainGrid() {
           lg={3}
           className={classes.messageGrid}
         >
-          <Paper
-            style={{ borderRadius: "22px", backgroundColor: "#EDF0F4" }}
-            variant="outlined"
-            className={classes.paper}
-          >
-            Messaging section
-          </Paper>
+          <Message />
         </Grid>
       </Grid>
     </div>
