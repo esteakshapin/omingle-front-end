@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { withRouter } from 'react-router-dom';
 
 class Queue extends React.Component {
     constructor(props) {
@@ -9,10 +10,34 @@ class Queue extends React.Component {
             intervalId: '',
             userId: null
         }
+        this.checkTeam = this.checkTeam.bind(this);
+    }
+
+    checkTeam() {
+        axios({
+            method: 'GET',
+            url: 'http://localhost:8000/team/get_team/',
+            headers: {
+                Authorization: `JWT ${localStorage.getItem('token')}`,
+
+            },
+        }).then((res) => {
+            if (res.data.team.length > 0) {
+                this.props.history.push('lobby')
+            }
+            else if (!res.data.queryroom.players_waiting.includes(this.state.userId)) {
+                alert('You need to join the queue!');
+                this.props.history.push('/play/')
+            } else {
+                this.setState({
+                    playersWaiting: res.data.queryroom.players_waiting.length
+                })
+            }
+        })
     }
 
     async componentDidMount() {
-        axios({
+        await axios({
             method: 'GET',
             url: 'http://localhost:8000/rest-auth/user/',
             headers: {
@@ -24,22 +49,10 @@ class Queue extends React.Component {
             .catch(error => console.log(error));
 
         try {
+            this.checkTeam();
             let intervalId = setInterval(() => {
-                axios({
-                    method: 'GET',
-                    url: 'http://localhost:8000/team/get_team/',
-                    headers: {
-                        Authorization: `JWT ${localStorage.getItem('token')}`,
-
-                    },
-                }).then((res) => {
-                    if (!res.data.queryroom.players_waiting.includes(this.state.userId)) {
-                        alert('You need to join the queue!');
-
-                    }
-                    console.log(res)
-                })
-            }, 10000)
+                this.checkTeam();
+            }, 5000)
 
             this.setState({ intervalId: intervalId });
 
@@ -56,9 +69,10 @@ class Queue extends React.Component {
         return (
             <div>
                 Queue Page
+                <h1>{this.state.playersWaiting}</h1>
             </div>
         )
     }
 }
 
-export default Queue;
+export default withRouter(Queue);

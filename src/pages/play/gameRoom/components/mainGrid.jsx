@@ -34,7 +34,7 @@ const useStyles = makeStyles({
   }
 });
 
-export default function MainGrid() {
+export default function MainGrid(props) {
   const classes = useStyles();
 
   return (
@@ -47,7 +47,7 @@ export default function MainGrid() {
       >
         <Grid item xs={12} sm={12} md={8} lg={9} className={classes.quizGrid}>
           <Paper variant="outlined" square className={classes.paper}>
-            <QuizGrid />
+            <QuizGrid videoRoom={props.videoRoom} />
           </Paper>
         </Grid>
         <Grid

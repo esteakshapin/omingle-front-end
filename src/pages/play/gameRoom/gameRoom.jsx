@@ -5,63 +5,75 @@ import MainGrid from "./components/mainGrid";
 
 import axios from "axios";
 
+import { withRouter } from 'react-router-dom';
 
-const useStyles = (theme) => ({
-  root: {
-    display: "flex",
-    flexDirection: "column",
-    minHeight: "100vh"
-  },
-  main: {
-    marginTop: theme.spacing(8),
-    marginBottom: theme.spacing(2),
-    backgroundColor: "red"
-  },
-  mainGrid: {
-    flexGrow: 1,
-    backgroundColor: "red",
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2)
-    // width:
-  },
-  paper: {
-    height: 140,
-    width: 100
-  }
-});
+const queryString = require('query-string');
+
+const { connect } = require('twilio-video');
+
+
+// const useStyles = (theme) => ({
+//   root: {
+//     display: "flex",
+//     flexDirection: "column",
+//     minHeight: "100vh"
+//   },
+//   main: {
+//     marginTop: theme.spacing(8),
+//     marginBottom: theme.spacing(2),
+//     backgroundColor: "red"
+//   },
+//   mainGrid: {
+//     flexGrow: 1,
+//     backgroundColor: "red",
+//     marginTop: theme.spacing(2),
+//     marginBottom: theme.spacing(2)
+//     // width:
+//   },
+//   paper: {
+//     height: 140,
+//     width: 100
+//   }
+// });
 
 class GameRoom extends React.Component {
   constructor(props) {
     super(props);
-
-    this.getAccessToken = this.getAccessToken.bind(this);
+    this.state = {
+      accessToken: null,
+      room: null
+    }
+    this.joinRoom = this.joinRoom.bind(this);
   }
 
-  async getAccessToken() {
-    axios({
-      method: 'GET',
-      url: 'http://localhost:8000/team/get_access_token',
-      headers: {
-        Authorization: `JWT ${localStorage.getItem('token')}`,
+  async joinRoom() {
+    try {
+      const room = await connect(this.state.accessToken, {
+        audio: true,
+        // video: true
+      });
 
-      },
-    })
-      .then((res) => console.log(res))
-      .catch((error) => console.log(error));
+      this.setState({ room: room }, () => console.log('connection success'));
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   componentDidMount() {
-    // this.getAccessToken();
+    const parsed = queryString.parse(this.props.location.search);
+    console.log(parsed);
+    this.setState({
+      accessToken: parsed.accessToken
+    }, () => this.joinRoom());
   }
 
   render() {
-    const { classes } = this.props;
     return (
-      <MainGrid />
+      this.state.room ? <MainGrid videoRoom={this.state.room} /> : <div>Connecting</div>
     );
   }
 
 
 }
 
-export default withStyles(useStyles)(GameRoom);
+export default withRouter(GameRoom);
