@@ -6,7 +6,9 @@ import {
   List,
   ListItem,
   ListItemText,
-  Button
+  Button,
+  Menu,
+  MenuItem
 } from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
 import logo from "../assets/images/logo_transparent.png";
@@ -63,6 +65,16 @@ const Header = (props) => {
   const [isLoggedIn, setLoggedIn] = useState(localStorage.getItem('token') ? true : false);
   const [firstName, setFirstName] = useState(localStorage.getItem('firstName'));
   const [lastName, setLastName] = useState(localStorage.getItem('lastName'));
+  //avatar dropdown
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   // check to make sure user is still logged in
   useEffect(() => {
@@ -97,6 +109,7 @@ const Header = (props) => {
 
   const logOut = useCallback(
     async () => {
+      handleClose()
       axios({
         method: 'POST',
         url: "http://localhost:8000/rest-auth/logout/",
@@ -187,8 +200,16 @@ const Header = (props) => {
           </List>{" "}
         </div>
 
-        {isLoggedIn ? <Avatar onClick={logOut}>{firstName.charAt(0) + lastName.charAt(0)}</Avatar> : <GoogleSocialAuth logIn={logIn} />}
-
+        {isLoggedIn ? <Avatar onClick={handleClick} style={{"cursor": "pointer"}}>{firstName.charAt(0) + lastName.charAt(0)}</Avatar> : <GoogleSocialAuth logIn={logIn} />}
+        <Menu
+          id="simple-menu"
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
+          <MenuItem onClick={logOut}>Logout</MenuItem>
+      </Menu>
       </Toolbar>
     </AppBar>
   );
