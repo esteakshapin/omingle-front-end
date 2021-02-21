@@ -13,9 +13,11 @@ import Container from '@material-ui/core/Container';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        flexGrow: 1
+        flexGrow: 1,
+
     },
     paper: {
+        marginTop: theme.spacing(2),
         padding: theme.spacing(2),
         margin: "auto",
         maxWidth: 500

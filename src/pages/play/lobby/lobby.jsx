@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, withRouter } from 'react-router-dom';
 import axios from 'axios';
+import Button from '@material-ui/core/Button';
+import UserCard from './userCard';
+
 
 const queryString = require('query-string');
 
@@ -65,7 +68,7 @@ class Lobby extends React.Component {
         this.setState((state) => ({
             players: [...state.players, user1.data]
         }), () => { console.log(this.state) })
-        
+
         const user2 = await this.getUser(team[1]);
         this.setState((state) => ({
             players: [...state.players, user2.data]
@@ -83,7 +86,7 @@ class Lobby extends React.Component {
                 userAccessToken: res.data.team[0].access_token2
             })
         }
-        
+
         opponents.forEach(element => {
             this.getUser(element).then(
                 (user) => {
@@ -91,8 +94,8 @@ class Lobby extends React.Component {
                     this.setState((state) => ({
                         rivals: [...state.rivals, user.data]
                     }), () => {
-                            console.log('foreach update');
-                            console.log(this.state);
+                        console.log('foreach update');
+                        console.log(this.state);
                     })
                 }
             )
@@ -100,10 +103,10 @@ class Lobby extends React.Component {
     }
 
     joinRoom() {
-        
+
         const parsed = {}
         parsed.accessToken = this.state.userAccessToken;
-        
+
         const stringified = queryString.stringify(parsed).replace('b%27', '').replace('%27', '');
 
         console.log('etf')
@@ -137,16 +140,38 @@ class Lobby extends React.Component {
 
     render() {
         return (
-            <div>
-                Lobby Page
-    
-                <h1>Your Team</h1>
-                {this.state.players.map((item, index) => <p key={index + item}>{`${item.first_name} ${item.last_name}`}</p>)}
+            <div style={{ padding: '10px' }}>
+                <h2>
+                    Lobby Page
+                </h2>
 
-                <h1>Opponents</h1>
-                {this.state.rivals.map((item, index) => <p key={index + item}>{`${item.first_name} ${item.last_name}`}</p>)}
-            
-                <button onClick={this.joinRoom}>Join Room</button>
+                <center><h3>Your Team</h3></center>
+                <center>
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        {this.state.players.map((item, index) => {
+                            return <UserCard key={item + index} firstName={item.first_name} lastName={item.last_name} localUser={item.id == this.state.userId} />
+                        })}
+                    </div>
+                </center>
+
+
+                <center>
+                    <h3>Opponents</h3>
+                </center>
+
+                <center>
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        {this.state.rivals.map((item, index) => {
+                            return <UserCard key={item + index} firstName={item.first_name} lastName={item.last_name} localUser={item.id == this.state.userId} />
+                        })}
+                    </div>
+                </center>
+                <center>
+                    <Button variant="contained" color="primary" onClick={this.joinRoom}>
+                        {" "}
+                        Join Room
+                     </Button>
+                </center>
             </div>
         )
     }
