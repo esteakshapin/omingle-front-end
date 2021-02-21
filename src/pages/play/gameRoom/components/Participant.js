@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
 import Track from './Track';
+import { withStyles } from '@material-ui/core/styles';
+
+const useStyles = ((theme) => ({
+    
+}));
 
 class Participant extends Component {
     constructor(props) {
@@ -27,16 +32,20 @@ class Participant extends Component {
     }
 
     render() {
+        const { classes } = this.props;
         return (
-            <div className="participant" id={this.props.participant.identity}>
-                <div className="identity">{this.props.participant.identity}</div>
-                {
-                    this.state.tracks.map(track =>
-                        <Track key={track} filter={this.state.filter} track={track} />)
-                }
+            <div className={classes.participant} id={this.props.participant.identity}>
+                <div className={classes.identity}>{this.props.participant.identity}</div>
+                <div className={classes.trackWrapper}>
+                    {
+                        this.state.tracks.map(track =>
+                            <Track key={track} filter={this.state.filter} track={track} />
+                        )
+                    }
+                </div>
             </div>
         );
     }
 }
 
-export default Participant;
+export default withStyles(useStyles)(Participant);
