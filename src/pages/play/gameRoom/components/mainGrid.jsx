@@ -58,7 +58,7 @@ export default function MainGrid(props) {
           lg={3}
           className={classes.messageGrid}
         >
-          <Message />
+          <Message client={props.client} teamChannel={props.teamChannel} />
         </Grid>
       </Grid>
     </div>

@@ -11,46 +11,58 @@ const queryString = require('query-string');
 
 const { connect } = require('twilio-video');
 
-
-// const useStyles = (theme) => ({
-//   root: {
-//     display: "flex",
-//     flexDirection: "column",
-//     minHeight: "100vh"
-//   },
-//   main: {
-//     marginTop: theme.spacing(8),
-//     marginBottom: theme.spacing(2),
-//     backgroundColor: "red"
-//   },
-//   mainGrid: {
-//     flexGrow: 1,
-//     backgroundColor: "red",
-//     marginTop: theme.spacing(2),
-//     marginBottom: theme.spacing(2)
-//     // width:
-//   },
-//   paper: {
-//     height: 140,
-//     width: 100
-//   }
-// });
+const Chat = require("twilio-chat");
 
 class GameRoom extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       accessToken: null,
-      room: null
+      room: null,
+      chatClient: null
     }
     this.joinRoom = this.joinRoom.bind(this);
   }
 
   async joinRoom() {
+
     try {
+
+      // connecting to chat
+      try {
+        const chatClient = await Chat.Client.create(this.state.accessToken);
+        this.setState({
+          chatClient: chatClient
+        }, () => console.log(this.state))
+      } catch (err) {
+        console.log(err)
+      }
+
+      const audio = null;
+      const video = null;
+      try {
+        video = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: false
+        })
+      } catch (err) {
+        console.log('video not found');
+        console.log(err);
+      }
+
+      try {
+        audio = await navigator.mediaDevices.getUserMedia({
+          video: false,
+          audio: true
+        })
+      } catch (err) {
+        console.log('audio not found');
+        console.log(err);
+      }
+
       const room = await connect(this.state.accessToken, {
-        audio: true,
-        // video: true
+        audio: (audio ? true : false),
+        video: (video ? true : false)
       });
 
       this.setState({ room: room }, () => console.log('connection success'));
@@ -69,7 +81,7 @@ class GameRoom extends React.Component {
 
   render() {
     return (
-      this.state.room ? <MainGrid videoRoom={this.state.room} /> : <div>Connecting</div>
+      this.state.room && this.state.chatClient ? <MainGrid videoRoom={this.state.room} client={this.state.chatClient} teamChannel={this.state.room.name} /> : <div>Connecting</div>
     );
   }
 
