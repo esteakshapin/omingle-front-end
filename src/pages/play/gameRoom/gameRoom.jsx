@@ -50,7 +50,7 @@ class GameRoom extends React.Component {
     try {
       const room = await connect(this.state.accessToken, {
         audio: true,
-        // video: true
+        video: true
       });
 
       this.setState({ room: room }, () => console.log('connection success'));

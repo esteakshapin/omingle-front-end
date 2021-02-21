@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
+import { withStyles } from '@material-ui/core/styles';
+import './Track.css';
+
+const useStyles = ((theme) => ({
+    
+}));
 
 class Track extends Component {
+
     constructor(props) {
         super(props)
         this.ref = React.createRef();
@@ -10,16 +17,18 @@ class Track extends Component {
         if (this.props.track !== null) {
             const child = this.props.track.attach();
             this.ref.current.classList.add(this.props.track.kind);
-            this.ref.current.appendChild(child)
+            child.classList.add("trackObject");
+            this.ref.current.appendChild(child);
         }
     }
 
     render() {
+        const { classes } = this.props;
+
         return (
-            <div className="track" ref={this.ref}>
-            </div>
+            <div className={classes.track} ref={this.ref} />
         )
     }
 }
 
-export default Track;
+export default withStyles(useStyles)(Track);
